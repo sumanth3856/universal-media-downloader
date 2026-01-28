@@ -85,16 +85,9 @@ export default async function handler(req, res) {
       '--fragment-retries', '10',
       '--sleep-requests', '1.5',
       '--sleep-interval', '3',
-      '--max-sleep-interval', '6',
-      // Fix: Add JS runtime for YouTube extraction
-      '--js-runtimes', 'node',
-      // Fix: Force Android client to bypass SABR streaming issues
-      '--extractor-args', 'youtube:player_client=android,web;formats=missing_pot',
-      // Enhanced User-Agent
-      '--user-agent', 'Mozilla/5.0 (Linux; Android 13; SM-G991B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36',
-      // Additional anti-403 headers
-      '--add-header', 'Accept-Language:en-US,en;q=0.9',
-      '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+      // Removed --js-runtimes and --extractor-args as they were restricting format access
+      // Using default yt-dlp behavior which returns all formats
+      '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
     ]);
   } else {
     args = args.concat([
@@ -114,16 +107,9 @@ export default async function handler(req, res) {
       '--no-cache-dir',
       '--sleep-requests', '1.5',
       '--sleep-interval', '3',
-      '--max-sleep-interval', '6',
-      // Fix: Add JS runtime for YouTube extraction
-      '--js-runtimes', 'node',
-      // Fix: Force Android client to bypass SABR streaming issues
-      '--extractor-args', 'youtube:player_client=android,web;formats=missing_pot',
-      // Enhanced User-Agent (Android Chrome)
-      '--user-agent', 'Mozilla/5.0 (Linux; Android 13; SM-G991B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36',
-      // Additional anti-403 headers
-      '--add-header', 'Accept-Language:en-US,en;q=0.9',
-      '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+      // Removed --js-runtimes and --extractor-args as they were restricting format access
+      // Using default yt-dlp behavior which returns all formats
+      '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
     ]);
   }
 
