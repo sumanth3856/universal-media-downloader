@@ -65,7 +65,8 @@ export default async function handler(req, res) {
   sendEvent('progress', { stage: 'Starting', percent: 0, message: 'Initializing download...' });
 
   // Build yt-dlp arguments
-  let args = ['-m', 'yt_dlp', '--newline', '--progress']; // --newline for line-by-line progress
+  // --no-warnings suppresses all warning messages for cleaner output
+  let args = ['-m', 'yt_dlp', '--newline', '--progress', '--no-warnings'];
 
   if (quality === 'audio') {
     args = args.concat([
@@ -79,9 +80,21 @@ export default async function handler(req, res) {
       '--print', 'filename',
       '--force-overwrites',
       '--no-cache-dir',
-      '--extractor-retries', '5',
-      '--sleep-requests', '1',
-      '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      '--extractor-retries', '10',
+      '--retries', '10',
+      '--fragment-retries', '10',
+      '--sleep-requests', '1.5',
+      '--sleep-interval', '3',
+      '--max-sleep-interval', '6',
+      // Fix: Add JS runtime for YouTube extraction
+      '--js-runtimes', 'node',
+      // Fix: Force Android client to bypass SABR streaming issues
+      '--extractor-args', 'youtube:player_client=android,web;formats=missing_pot',
+      // Enhanced User-Agent
+      '--user-agent', 'Mozilla/5.0 (Linux; Android 13; SM-G991B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36',
+      // Additional anti-403 headers
+      '--add-header', 'Accept-Language:en-US,en;q=0.9',
+      '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
     ]);
   } else {
     args = args.concat([
@@ -94,15 +107,23 @@ export default async function handler(req, res) {
       '--restrict-filenames',
       '--print', 'filename',
       '--no-simulate',
-      '--retries', '5',
-      '--fragment-retries', '5',
-      '--extractor-retries', '5',
+      '--retries', '10',
+      '--fragment-retries', '10',
+      '--extractor-retries', '10',
       '--force-overwrites',
       '--no-cache-dir',
-      '--sleep-requests', '1',
-      '--sleep-interval', '2',
-      '--max-sleep-interval', '5',
-      '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      '--sleep-requests', '1.5',
+      '--sleep-interval', '3',
+      '--max-sleep-interval', '6',
+      // Fix: Add JS runtime for YouTube extraction
+      '--js-runtimes', 'node',
+      // Fix: Force Android client to bypass SABR streaming issues
+      '--extractor-args', 'youtube:player_client=android,web;formats=missing_pot',
+      // Enhanced User-Agent (Android Chrome)
+      '--user-agent', 'Mozilla/5.0 (Linux; Android 13; SM-G991B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36',
+      // Additional anti-403 headers
+      '--add-header', 'Accept-Language:en-US,en;q=0.9',
+      '--add-header', 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
     ]);
   }
 
